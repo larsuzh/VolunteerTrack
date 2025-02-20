@@ -1,5 +1,5 @@
-import { supabase } from "./supabase";
-import { Database } from "@/types/supabase";
+import {supabase} from "./supabase";
+import {Database} from "@/types/supabase";
 
 type VolunteerHours = Database["public"]["Tables"]["volunteer_hours"]["Row"];
 
@@ -37,13 +37,22 @@ export async function getRecentHours(user_id: string, limit = 5) {
 }
 
 export async function getLeaderboard(timeRange: { start: Date; end: Date }) {
-  const { data, error } = await supabase
-    .from("volunteer_hours")
-    .select("user_id, hours")
-    .gte("date", timeRange.start.toISOString())
-    .lte("date", timeRange.end.toISOString())
-    .order("hours", { ascending: false });
+    const { data, error } = await supabase
+        .from("volunteer_hours")
+        .select("user_id, hours")
+        .gte("date", timeRange.start.toISOString())
+        .lte("date", timeRange.end.toISOString())
+        .order("hours", { ascending: false });
 
-  if (error) throw error;
-  return data;
+    if (error) throw error;
+
+    const aggregatedHours = data.reduce((acc, curr) => {
+        acc[curr.user_id] = (acc[curr.user_id] || 0) + curr.hours;
+        return acc;
+    }, {} as Record<string, number>);
+
+    return Object.entries(aggregatedHours).map(([user_id, hours]) => ({
+        user_id,
+        hours,
+    })).sort((a, b) => b.hours - a.hours);
 }
