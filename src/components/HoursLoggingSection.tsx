@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Button } from "./ui/button";
@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { logHours } from "@/lib/volunteer.ts";
+import { logHours, getRecentHours } from "@/lib/volunteer.ts";
 
 interface HoursLoggingSectionProps {
   onSubmit?: (data: any) => void;
@@ -34,6 +34,21 @@ const HoursLoggingSection = ({
                                },
                              }: HoursLoggingSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [recentHours, setRecentHours] = useState([]);
+
+  useEffect(() => {
+    const fetchRecentHours = async () => {
+      try {
+        const data = await getRecentHours("lars");
+        setRecentHours(data);
+      } catch (error) {
+        console.error("Fehler beim Laden der letzten Stunden:", error);
+      }
+    };
+
+    fetchRecentHours();
+  }, []);
 
   return (
       <Card className="w-full max-w-[450px] h-[600px] bg-white p-6 flex flex-col gap-6">
@@ -66,35 +81,20 @@ const HoursLoggingSection = ({
 
           <TabsContent value="recent" className="flex-1">
             <div className="space-y-4 mt-4">
-              {[
-                {
-                  date: "March 15, 2024",
-                  activity: "Coach Assistant",
-                  hours: 3,
-                },
-                {
-                  date: "March 12, 2024",
-                  activity: "Equipment Management",
-                  hours: 2,
-                },
-                {
-                  date: "March 10, 2024",
-                  activity: "Event Setup",
-                  hours: 4,
-                },
-              ].map((entry, index) => (
+              {recentHours.map((entry, index) => (
                   <div
                       key={index}
                       className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
                   >
-                    <p className="font-medium">{entry.activity}</p>
+                    <p className="font-medium">{entry.description}</p>
                     <div className="flex justify-between text-sm text-gray-600 mt-1">
-                      <span>{entry.date}</span>
+                      <span>{new Date(entry.date).toLocaleDateString()}</span>
                       <span>{entry.hours} hours</span>
                     </div>
                   </div>
               ))}
             </div>
+
           </TabsContent>
 
           <TabsContent value="stats" className="flex-1">
