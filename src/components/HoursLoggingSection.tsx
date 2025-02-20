@@ -21,11 +21,13 @@ const HoursLoggingSection = ({
                                onSubmit = async (data) => {
                                  try {
                                    await logHours({
-                                     user_id: "temp-user-id", // Replace with actual user ID from auth
+                                     user_id: "lars",
                                      date: data.date,
                                      description: data.description,
                                      hours: Number(data.hours),
                                    });
+                                   window.location.reload();
+
                                  } catch (error) {
                                    console.error("Error logging hours:", error);
                                  }

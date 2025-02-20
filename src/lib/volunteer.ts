@@ -28,7 +28,7 @@ export async function getRecentHours(user_id: string, limit = 5) {
   const { data, error } = await supabase
     .from("volunteer_hours")
     .select("*")
-    .eq("user_id", user_id)
+    .eq("user_id", "lars")
     .order("date", { ascending: false })
     .limit(limit);
 
