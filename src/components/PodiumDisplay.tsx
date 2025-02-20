@@ -40,7 +40,7 @@ const defaultVolunteers: Volunteer[] = [
 ];
 
 const PodiumDisplay = ({
-  topVolunteers = defaultVolunteers,
+  topVolunteers,
 }: PodiumDisplayProps) => {
   const podiumOrder = [1, 0, 2]; // Display order: 2nd, 1st, 3rd
 

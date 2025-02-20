@@ -3,13 +3,11 @@ import HoursLoggingSection from "./HoursLoggingSection";
 import LeaderboardSection from "./LeaderboardSection";
 
 interface HomeProps {
-  onHoursSubmit?: (data: any) => void;
   onDateRangeChange?: (range: { from: Date; to: Date }) => void;
   onPeriodChange?: (period: string) => void;
 }
 
 const Home = ({
-  onHoursSubmit = (data) => console.log("Hours submitted:", data),
   onDateRangeChange = (range) => console.log("Date range changed:", range),
   onPeriodChange = (period) => console.log("Period changed:", period),
 }: HomeProps) => {
@@ -27,7 +25,7 @@ const Home = ({
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-8">
-          <HoursLoggingSection onSubmit={onHoursSubmit} />
+          <HoursLoggingSection/>
           <LeaderboardSection
             onDateRangeChange={onDateRangeChange}
             onPeriodChange={onPeriodChange}

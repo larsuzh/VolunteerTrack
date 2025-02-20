@@ -30,23 +30,10 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 interface HoursFormProps {
-  onSubmit?: (data: FormData) => void;
+  onSubmit: (data: FormData) => void;
 }
 
-const HoursForm = ({
-  onSubmit = async (data) => {
-    try {
-      await logHours({
-        user_id: "temp-user-id", // Replace with actual user ID from auth
-        date: data.date,
-        description: data.description,
-        hours: Number(data.hours),
-      });
-    } catch (error) {
-      console.error("Error logging hours:", error);
-    }
-  },
-}: HoursFormProps) => {
+const HoursForm = ({ onSubmit }: HoursFormProps) => {
   const {
     register,
     handleSubmit,

@@ -112,9 +112,9 @@ const LeaderboardSection = ({
         ) : (
           <>
             <PodiumDisplay
-              volunteers={leaderboardData.slice(0, 3).map((v, i) => ({
+                topVolunteers={leaderboardData.slice(0, 3).map((v, i) => ({
                 id: v.user_id,
-                name: `Volunteer ${v.user_id.slice(0, 4)}`,
+                name: v.user_id,
                 hours: v.hours,
                 avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${v.user_id}`,
                 rank: (i + 1) as 1 | 2 | 3,
@@ -123,7 +123,7 @@ const LeaderboardSection = ({
             <VolunteerList
               volunteers={leaderboardData.slice(3).map((v, i) => ({
                 id: v.user_id,
-                name: `Volunteer ${v.user_id.slice(0, 4)}`,
+                name: v.user_id,
                 hours: v.hours,
                 rank: i + 4,
                 lastActivity: new Date().toISOString(),
